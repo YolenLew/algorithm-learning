@@ -1,4 +1,4 @@
-package com.lew.algo.scene._01_sort;
+package com.lew.algo.scene._02_algorithm._01_sort;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -80,8 +80,7 @@ public class _02_ExternalFileSorter {
 
     private static void mergeSortedChunks(String outputFile, int tmpFileIdx) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
-            PriorityQueue<ChunkReader> priorityQueue =
-                    new PriorityQueue<>(Comparator.comparing(ChunkReader::getCurrentNum));
+            PriorityQueue<ChunkReader> priorityQueue = new PriorityQueue<>(Comparator.comparing(ChunkReader::getCurrentNum));
             List<ChunkReader> chunkReaders = new ArrayList<>();
 
             // 打开所有分块文件的读取器
@@ -163,8 +162,7 @@ public class _02_ExternalFileSorter {
     }
 
     static class NumberStringComparator implements Comparator<String> {
-        @Override
-        public int compare(String s1, String s2) {
+        @Override public int compare(String s1, String s2) {
             // 假设每一行是一个任意长度的数字，使用字符串比较转换为BigDecimal进行排序
             BigDecimal num1 = new BigDecimal(s1);
             BigDecimal num2 = new BigDecimal(s2);

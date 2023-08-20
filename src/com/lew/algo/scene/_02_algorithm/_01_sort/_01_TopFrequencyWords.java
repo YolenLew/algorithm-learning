@@ -1,4 +1,4 @@
-package com.lew.algo.scene._01_sort;
+package com.lew.algo.scene._02_algorithm._01_sort;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -43,7 +43,7 @@ public class _01_TopFrequencyWords {
 
             // 使用最小堆找出频数最高的TOP_K个词
             PriorityQueue<WordFrequency> minHeap =
-                    new PriorityQueue<>(Comparator.comparingInt(WordFrequency::getFrequency));
+                new PriorityQueue<>(Comparator.comparingInt(WordFrequency::getFrequency));
             for (Map.Entry<String, Integer> entry : wordCounts.entrySet()) {
                 WordFrequency wordFrequency = new WordFrequency(entry.getKey(), entry.getValue());
                 if (minHeap.size() < TOP_K) {
@@ -84,22 +84,20 @@ public class _01_TopFrequencyWords {
             return frequency;
         }
 
-        @Override
-        public int compareTo(WordFrequency other) {
+        @Override public int compareTo(WordFrequency other) {
             return Integer.compare(this.frequency, other.frequency);
         }
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            WordFrequency that = (WordFrequency) o;
-            return frequency == that.frequency &&
-                    Objects.equals(word, that.word);
+        @Override public boolean equals(Object o) {
+            if (this == o)
+                return true;
+            if (o == null || getClass() != o.getClass())
+                return false;
+            WordFrequency that = (WordFrequency)o;
+            return frequency == that.frequency && Objects.equals(word, that.word);
         }
 
-        @Override
-        public int hashCode() {
+        @Override public int hashCode() {
             return Objects.hash(word, frequency);
         }
 
