@@ -78,7 +78,7 @@ class P_148_SortList {
      * }
      */
     class Solution {
-        public ListNode sortList(ListNode head) {
+        public ListNode sortList00(ListNode head) {
             // 自顶向下归并排序：分割+递归+归并排序
             // 递归结束条件：只有一个节点或者没有节点，不能分割了
             if (head == null || head.next == null) {
@@ -90,8 +90,8 @@ class P_148_SortList {
             ListNode halfRightNode = midNode.next;
             midNode.next = null;
             // 接着递归下钻：不断分割节点
-            ListNode left = sortList(head);
-            ListNode right = sortList(halfRightNode);
+            ListNode left = sortList00(head);
+            ListNode right = sortList00(halfRightNode);
 
             // 第二步，归并排序
             return mergeTwoLists(left, right);
@@ -129,6 +129,69 @@ class P_148_SortList {
             while (fast != null && fast.next != null) {
                 fast = fast.next.next;
                 slow = slow.next;
+            }
+
+            return slow;
+        }
+
+        // 归并排序+递归
+        public ListNode sortList(ListNode head) {
+            // 1、递归结束条件
+            if (head == null || head.next == null) {
+                return head;
+            }
+
+            // 2、找到链表中间节点并断开链表
+            ListNode midLeftNode = midLeftNode(head);
+            ListNode rightHead = midLeftNode.next;
+            midLeftNode.next = null;
+
+            // 3、分治排序
+            ListNode leftSorted = sortList(head);
+            ListNode rightSorted = sortList(rightHead);
+
+            // 4、归并排序(合并有序链表)
+            return mergeTwoListsMy(leftSorted, rightSorted);
+        }
+
+        private ListNode mergeTwoListsMy(ListNode leftSorted, ListNode rightSorted) {
+            ListNode dummy = new ListNode();
+            ListNode curr = dummy;
+
+            ListNode left = leftSorted;
+            ListNode right = rightSorted;
+            while (left != null && right != null) {
+                if (left.val < right.val) {
+                    curr.next = new ListNode(left.val);
+                    left = left.next;
+                } else {
+                    curr.next = new ListNode(right.val);
+                    right = right.next;
+                }
+                curr = curr.next;
+            }
+            if (left != null) {
+                curr.next = left;
+            }
+            if (right != null) {
+                curr.next = right;
+            }
+
+            return dummy.next;
+        }
+
+        // 快慢指针寻找中间节点：注意，此处不是一般的找中心点(或中心右侧)，而是中心点或中心点左侧节点
+        private ListNode midLeftNode(ListNode head) {
+            if (head == null || head.next == null) {
+                return head;
+            }
+
+            // 注意：此处fast先走一步，就是为了寻找中间偏左的中间点
+            ListNode slow = head;
+            ListNode fast = head.next.next;
+            while (fast != null && fast.next != null) {
+                slow = slow.next;
+                fast = fast.next.next;
             }
 
             return slow;

@@ -77,7 +77,7 @@ class P_2_AddTwoNumbers {
      * }
      */
     class Solution {
-        public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        public ListNode addTwoNumbers00(ListNode l1, ListNode l2) {
             // 哑节点：链表常用技巧
             ListNode dummy = new ListNode(0);
             ListNode curr = dummy;
@@ -86,8 +86,8 @@ class P_2_AddTwoNumbers {
             int x, y, val, sum;
             // 两数相加，小位数的前面补零
             while (l1 != null || l2 != null) {
-                x= l1 == null ? 0: l1.val;
-                y= l2 == null ? 0: l2.val;
+                x = l1 == null ? 0 : l1.val;
+                y = l2 == null ? 0 : l2.val;
                 sum = x + y + carry;
                 carry = sum / 10;
                 val = sum % 10;
@@ -101,7 +101,42 @@ class P_2_AddTwoNumbers {
                 }
             }
             if (carry == 1) {
-                curr.next= new ListNode(carry);
+                curr.next = new ListNode(carry);
+            }
+
+            return dummy.next;
+        }
+
+        public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+            ListNode dummy = new ListNode();
+            ListNode curr = dummy;
+            // 进位
+            int carry = 0;
+            int x = 0;
+            int y = 0;
+            int sum = 0;
+            int val = 0;
+            while (l1 != null || l2 != null) {
+                x = l1 != null ? l1.val : 0;
+                y = l2 != null ? l2.val : 0;
+                sum = x + y + carry;
+                val = sum % 10;
+                carry = sum / 10;
+
+                curr.next = new ListNode(val);
+                curr = curr.next;
+
+                if (l1 != null) {
+                    l1 = l1.next;
+                }
+
+                if (l2 != null) {
+                    l2 = l2.next;
+                }
+            }
+
+            if (carry != 0) {
+                curr.next = new ListNode(carry);
             }
 
             return dummy.next;

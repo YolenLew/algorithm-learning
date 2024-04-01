@@ -51,7 +51,7 @@ class P_53_MaximumSubarray {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        public int maxSubArray(int[] nums) {
+        public int maxSubArray00(int[] nums) {
             // 初始化左右指针
             int left = 0, right = 0;
             // 初始化子集和、最大和（注意：maxSum一定要设置为最小负数，这样遇到全负数组的时候才能不出错）
@@ -82,9 +82,34 @@ class P_53_MaximumSubarray {
             dp[0] = nums[0];
             int maxSum = nums[0];
             for (int i = 1; i < nums.length; i++) {
-                dp[i] = dp[i - 1] <= 0 ? nums[i] : dp[i -1] + nums[i];
+                dp[i] = dp[i - 1] <= 0 ? nums[i] : dp[i - 1] + nums[i];
                 maxSum = Math.max(dp[i], maxSum);
             }
+            return maxSum;
+        }
+
+        public int maxSubArray(int[] nums) {
+            // 初始化左右指针
+            int left = 0, right = 0;
+            // 初始化子集和、最大和（注意：maxSum一定要设置为最小负数，这样遇到全负数组的时候才能不出错）
+            int windowSum = 0;
+            int maxSum = Integer.MIN_VALUE;
+
+            // 滑动窗口
+            while (right < nums.length) {
+                // 扩大窗口：移动右指针求和
+                windowSum += nums[right];
+                right++;
+                // 求此时最值
+                maxSum = Math.max(maxSum, windowSum);
+
+                // 缩小窗口：如果和为负数
+                while (windowSum < 0) {
+                    windowSum -= nums[left];
+                    left++;
+                }
+            }
+
             return maxSum;
         }
     }

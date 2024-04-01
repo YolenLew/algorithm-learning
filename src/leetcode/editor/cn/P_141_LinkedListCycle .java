@@ -91,7 +91,7 @@ class P_141_LinkedListCycle {
      * }
      */
     public class Solution {
-        public boolean hasCycle(ListNode head) {
+        public boolean hasCycle00(ListNode head) {
             // 双指针：快慢指针法，如果有环，两者因为速度差，必定会相遇
             ListNode fast = head;
             ListNode slow = head;
@@ -107,6 +107,28 @@ class P_141_LinkedListCycle {
             }
 
             return false;
+        }
+
+        public boolean hasCycle(ListNode head) {
+            ListNode fast = head;
+            ListNode slow = head;
+
+            while (fast != null) {
+                fast = fast.next;
+                if (fast != null) {
+                    fast = fast.next;
+                }
+
+                // 注意：必须先判断然后再移动慢指针，针对只有一个节点
+                if (fast == slow) {
+                    return true;
+                }
+
+                slow = slow.next;
+            }
+
+            return false;
+
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

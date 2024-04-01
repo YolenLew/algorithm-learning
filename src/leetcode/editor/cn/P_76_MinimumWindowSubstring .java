@@ -56,6 +56,7 @@ package leetcode.editor.cn;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 //java:最小覆盖子串
 class P_76_MinimumWindowSubstring {
@@ -65,7 +66,7 @@ class P_76_MinimumWindowSubstring {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        public String minWindow(String s, String t) {
+        public String minWindow00(String s, String t) {
             // 目标词频Map：记录目标字符串中的字符及词频
             Map<Character, Integer> targetMap = new HashMap<>();
             for (char c : t.toCharArray()) {
@@ -107,6 +108,53 @@ class P_76_MinimumWindowSubstring {
                 }
             }
             return length == Integer.MAX_VALUE ? "" : s.substring(start, start + length);
+        }
+
+        public String minWindow(String s, String t) {
+            // 目标词频Map：记录目标字符串中的字符及词频
+            Map<Character, Integer> targetMap = new HashMap<>();
+            for (char c : t.toCharArray()) {
+                targetMap.put(c, targetMap.getOrDefault(c, 0) + 1);
+            }
+            // 窗口Map：存储滑动窗口中有效字符及出现的次数
+            Map<Character, Integer> window = new HashMap<>();
+            // 初始化左右指针、有效字符统计数量
+            int left = 0, right = 0, valid = 0;
+            // 记录最小覆盖子串的起始索引及窗口字符长度（因为要返回子串）
+            int start = 0, length = Integer.MAX_VALUE;
+
+            while (right < s.length()) {
+                char startChar = s.charAt(right);
+                right++;
+                // 比对并更新移动窗口的数据
+                if (targetMap.containsKey(startChar)) {
+                    window.put(startChar, window.getOrDefault(startChar, 0) + 1);
+                    if (Objects.equals(window.get(startChar), targetMap.get(startChar))) {
+                        valid++;
+                    }
+                }
+
+                // 移动左指针：缩小窗口，寻找最小字串
+                while (targetMap.size() == valid) {
+                    // 更新子串长度
+                    if (right - left < length) {
+                        start = left;
+                        length = right - left;
+                    }
+                    char endChar = s.charAt(left);
+                    left++;
+                    // 更新窗口词频
+                    if (targetMap.containsKey(endChar)){
+                        if (Objects.equals(window.get(endChar), targetMap.get(endChar))) {
+                            valid--;
+                        }
+                        window.put(endChar, window.get(endChar) - 1);
+                    }
+                }
+
+            }
+            return length == Integer.MAX_VALUE ? "" : s.substring(start, start + length);
+
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

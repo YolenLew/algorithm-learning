@@ -94,7 +94,7 @@ class P_142_LinkedListCycleIi {
      * }
      */
     public class Solution {
-        public ListNode detectCycle(ListNode head) {
+        public ListNode detectCycle00(ListNode head) {
             // 当快慢指针相遇时，让其中任一个指针指向头节点，然后让它俩以相同速度前进，再次相遇时所在的节点位置就是环开始的位置
             ListNode fast = head;
             ListNode slow = head;
@@ -118,6 +118,34 @@ class P_142_LinkedListCycleIi {
                 fast = fast.next;
             }
             return slow;
+        }
+
+        public ListNode detectCycle(ListNode head) {
+            // 当快慢指针相遇时，让其中任一个指针指向头节点，然后让它俩以相同速度前进，
+            // 再次相遇时所在的节点位置就是环开始的位置
+            ListNode fast = head;
+            ListNode slow = head;
+
+            while (fast != null && fast.next != null) {
+                fast = fast.next.next;
+                slow = slow.next;
+
+                if (fast == slow) {
+                    break;
+                }
+            }
+
+            if (fast == null || fast.next == null) {
+                return null;
+            }
+
+            fast = head;
+            while (fast != slow) {
+                fast = fast.next;
+                slow = slow.next;
+            }
+
+            return fast;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

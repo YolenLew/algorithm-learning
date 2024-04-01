@@ -44,7 +44,7 @@ class P_70_ClimbingStairs {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        public int climbStairs(int n) {
+        public int climbStairs00(int n) {
             // 使用递归存在超时问题，需要使用空间换时间，初始化数组
             int[] dp = new int[n + 1];
             // 初始化1阶、2阶
@@ -69,6 +69,40 @@ class P_70_ClimbingStairs {
             return climbStairsFail(n - 1) + climbStairsFail(n - 2);
         }
 
+        public int climbStairs90(int n) {
+            if (n <= 2) {
+                return n;
+            }
+            // 两种方法爬楼梯：f(k) = f(k -1) + f(k-2)
+            int[] dp = new int[n + 2];
+            // 初始化base case
+            dp[1] = 1;
+            dp[2] = 2;
+            for (int i = 3; i < n; i++) {
+                dp[i] = dp[i - 1] + dp[i - 2];
+            }
+
+            return dp[n - 1] + dp[n - 2];
+        }
+
+        public int climbStairs(int n) {
+            // 空间优化版本
+            if (n <= 2) {
+                return n;
+            }
+            // 两种方法爬楼梯：f(k) = f(k -1) + f(k-2)
+            // 分析可知，每一次爬楼梯，只跟两个前面的数相关，所以可只用两个变量而不是数组
+            int k1 = 1;
+            int k2 = 2;
+            int ans = 0;
+            for (int i = 3; i <= n; i++) {
+                ans = k1 + k2;
+                k1 = k2;
+                k2 = ans;
+            }
+
+            return ans;
+        }
     }
     //leetcode submit region end(Prohibit modification and deletion)
 

@@ -100,7 +100,7 @@ class Node {
 */
 
     class Solution {
-        public Node copyRandomList(Node head) {
+        public Node copyRandomList00(Node head) {
             if (head == null) {
                 return null;
             }
@@ -120,6 +120,35 @@ class Node {
                 node.next = cur.next == null ? null : oldToNewMap.get(cur.next);
                 node.random = cur.random == null ? null : oldToNewMap.get(cur.random);
                 cur = cur.next;
+            }
+
+            return oldToNewMap.get(head);
+        }
+
+        public Node copyRandomList(Node head) {
+            if (head == null) {
+                return null;
+            }
+            // 数据复制核心解法：一个哈希，两次遍历
+            Map<Node, Node> oldToNewMap = new HashMap<>();
+            Node curr = head;
+            while (curr != null) {
+                Node newNode = new Node(curr.val);
+                oldToNewMap.put(curr, newNode);
+                curr = curr.next;
+            }
+
+            // 继续遍历，填充next和random节点
+            curr = head;
+            while (curr != null) {
+                Node newNode = oldToNewMap.get(curr);
+                Node nextNode = oldToNewMap.get(curr.next);
+                Node ranNode = oldToNewMap.get(curr.random);
+
+                newNode.next = nextNode;
+                newNode.random = ranNode;
+
+                curr = curr.next;
             }
 
             return oldToNewMap.get(head);

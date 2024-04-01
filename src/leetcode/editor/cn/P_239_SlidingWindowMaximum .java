@@ -53,7 +53,7 @@ class P_239_SlidingWindowMaximum {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        public int[] maxSlidingWindow(int[] nums, int k) {
+        public int[] maxSlidingWindow00(int[] nums, int k) {
             // 滑动窗口大小固定，求最值，使用LinkedList双端队列，队列最值以及索引前沿窗口的值
             Deque<Integer> window = new LinkedList<>();
             int[] result = new int[nums.length - k + 1];
@@ -84,6 +84,43 @@ class P_239_SlidingWindowMaximum {
                 window.addLast(nums[i]);
                 result[i - k + 1] = window.peekFirst();
             }
+            return result;
+        }
+
+        public int[] maxSlidingWindow(int[] nums, int k) {
+            // 滑动窗口大小固定，求最值，使用LinkedList双端队列，队列最值以及索引前沿窗口的值
+            LinkedList<Integer> window = new LinkedList<>();
+            int[] result = new int[nums.length - k + 1];
+            // 初始化第一个窗口
+            for (int i = 0; i < k; i++) {
+                // 后加入的元素：如果比前面加入的、而且是队列尾部的元素都大，那么直接顶掉即可
+                while (!window.isEmpty() && window.peekLast() <= nums[i]) {
+                    window.removeLast();
+                }
+                // 最后：直接加入队尾
+                window.addLast(nums[i]);
+            }
+            result[0] = window.peekFirst();
+
+            for (int i = k; i < nums.length; i++) {
+                // 先判断
+                // 如果上一个窗口的最值是窗口的第一个值，那么需要移除
+                if (window.peekFirst().equals(nums[i - k])) {
+                    window.removeFirst();
+                }
+
+                // 继续追加元素
+                // 滑动窗口，然后重新比较窗口的值，此处相当于对窗口值排序
+                // 第一种情况：如果新值小于队列的值，那么直接将新值放到队尾
+                // 第二种情况：如果新值大于队尾的值，那么一直移除队尾的小值，最后在队尾插入新值
+                // 注意  window.peekLast() < nums[i] 不能相等，否则在入口会被删掉
+                while (!window.isEmpty() && window.peekLast() < nums[i]) {
+                    window.removeLast();
+                }
+                window.addLast(nums[i]);
+                result[i - k + 1] = window.peekFirst();
+            }
+
             return result;
         }
     }

@@ -55,7 +55,7 @@ class P_189_RotateArray {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        public void rotate(int[] nums, int k) {
+        public void rotate00(int[] nums, int k) {
             int length = nums.length;
             int[] result = Arrays.copyOf(nums, nums.length);
             for (int i = 0; i < length; i++) {
@@ -63,6 +63,48 @@ class P_189_RotateArray {
                 nums[idx] = result[i];
             }
         }
+
+        public void rotate90(int[] nums, int k) {
+            int n = nums.length;
+            // O(n)：额外数组，利用变换后的索引对应关系求解
+            int[] copy = Arrays.copyOf(nums, n);
+            for (int i = 0; i < n; i++) {
+                // 向右轮转 k 个位置，原来是i，旋转后是 i+k，注意索引越界
+                int targetIdx = (i + k) % n;
+                nums[targetIdx] = copy[i];
+            }
+        }
+
+        public void rotate(int[] nums, int k) {
+            // 找规律得到的翻转数组方法
+            // nums = "----->-->"; k =3
+            // result = "-->----->";
+            //
+            // reverse "----->-->" we can get "<--<-----"
+            // reverse "<--" we can get "--><-----"
+            // reverse "<-----" we can get "-->----->"
+            // this visualization help me figure it out :)
+
+            // 防止索引越界
+            int n = nums.length;
+            k = k % n;
+            // 首先对整个数组实行翻转，这样子原数组中需要翻转的子数组，就会跑到数组最前面。
+            reverse(nums, 0, n - 1);
+            // 这时候，从 kkk 处分隔数组，左右两数组，各自进行翻转即可。
+            reverse(nums, 0, k - 1);
+            reverse(nums, k, n - 1);
+        }
+
+        public void reverse(int[] nums, int start, int end) {
+            while (start < end) {
+                int tmp = nums[start];
+                nums[start] = nums[end];
+                nums[end] = tmp;
+                start++;
+                end--;
+            }
+        }
+
     }
     //leetcode submit region end(Prohibit modification and deletion)
 

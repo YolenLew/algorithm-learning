@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 //java:找到字符串中所有字母异位词
 class P_438_FindAllAnagramsInAString {
@@ -52,6 +53,63 @@ class P_438_FindAllAnagramsInAString {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public List<Integer> findAnagrams(String s, String p) {
+            // 滑动窗口，双指针
+            // 目标字符Map：记录匹配字符串的目标字符及个数
+            Map<Character, Integer> targetCharAndNumMap = new HashMap<>();
+            for (int i = 0; i < p.length(); i++) {
+                targetCharAndNumMap.put(p.charAt(i), targetCharAndNumMap.getOrDefault(p.charAt(i), 0) + 1);
+            }
+            // 记录当前窗口字符及个数
+            Map<Character, Integer> windowCharAndNumMap = new HashMap<>();
+
+            // 初始化双指针
+            int left = 0;
+            int right = 0;
+
+            // 有效字符统计
+            int valid = 0;
+
+            // 结果集
+            List<Integer> result = new ArrayList<>();
+            while (right < s.length()) {
+                char endChar = s.charAt(right);
+
+                if (targetCharAndNumMap.containsKey(endChar)) {
+                    // 统计
+                    windowCharAndNumMap.put(endChar, windowCharAndNumMap.getOrDefault(endChar, 0) + 1);
+                    // 有效性判断
+                    if (Objects.equals(windowCharAndNumMap.get(endChar), targetCharAndNumMap.get(endChar))) {
+                        valid++;
+                    }
+                }
+
+                // 缩小窗口
+                while (right - left + 1 >= p.length()) {
+                    // 满足条件判断
+                    if (valid == targetCharAndNumMap.size()) {
+                        result.add(left);
+                    }
+                    char startChar = s.charAt(left);
+                    left++;
+
+                    // 更新窗口词频
+                    if (targetCharAndNumMap.containsKey(startChar)) {
+                        // 更新有效字符个数
+                        if (Objects.equals(windowCharAndNumMap.get(startChar), targetCharAndNumMap.get(startChar))) {
+                            valid--;
+                        }
+                        // 更新词频
+                        windowCharAndNumMap.put(startChar, windowCharAndNumMap.get(startChar) - 1);
+
+                    }
+                }
+                right++;
+            }
+
+            return result;
+        }
+
+        public List<Integer> findAnagrams00(String s, String p) {
             // 滑动窗口，双指针
             // 目标字符Map：记录匹配字符串的目标字符及个数
             Map<Character, Integer> targetMap = new HashMap<>();

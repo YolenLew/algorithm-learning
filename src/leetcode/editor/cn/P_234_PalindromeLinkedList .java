@@ -83,7 +83,7 @@ class P_234_PalindromeLinkedList {
             ListNode p1 = head;
             ListNode p2 = reverseSecondHalfStart;
 
-            while (result && p1 != null && p2!= null) {
+            while (result && p1 != null && p2 != null) {
                 if (p1.val != p2.val) {
                     result = false;
                 }
