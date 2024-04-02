@@ -64,7 +64,7 @@ class P_236_LowestCommonAncestorOfABinaryTree {
      * }
      */
     class Solution {
-        public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        public TreeNode lowestCommonAncestor00(TreeNode root, TreeNode p, TreeNode q) {
             // 遍历解法：遍历左右子树，如果：
             // 1. p q都能找到 返回最近公共祖先；2. p q 找到一个，返回p q；3. 都没找到 返回null
             if (root == null || root == p || root == q) {
@@ -87,6 +87,34 @@ class P_236_LowestCommonAncestorOfABinaryTree {
             if (right == null) {
                 return left;
             }
+            // 左右子树都找到p和q了，那就说明p和q分别在左右两个子树上，所以此时的最近公共祖先就是root
+            return root;
+        }
+
+        // ---------------------------------------------------------------
+        // -----------------------遍历；逻辑分析-----------------------
+        // ---------------------------------------------------------------
+        public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+            if (root == null || root == p || root == q) {
+                return root;
+            }
+
+            // 寻找左子树的结果
+            TreeNode leftResult = lowestCommonAncestor(root.left, p, q);
+            TreeNode rightResult = lowestCommonAncestor(root.right, p, q);
+
+            if (leftResult == null && rightResult == null) {
+                return null;
+            }
+
+            if (leftResult == null) {
+                return rightResult;
+            }
+
+            if (rightResult == null) {
+                return leftResult;
+            }
+
             // 左右子树都找到p和q了，那就说明p和q分别在左右两个子树上，所以此时的最近公共祖先就是root
             return root;
         }

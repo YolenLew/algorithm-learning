@@ -72,7 +72,7 @@ class P_437_PathSumIii {
         // 目标和
         int specifiedSum;
 
-        public int pathSum(TreeNode root, int targetSum) {
+        public int pathSum00(TreeNode root, int targetSum) {
             // 前缀和、回溯、递归
             // 先把0放入，是因为从根节点到当前节点的和如果刚好相等，这时差值就为0
             prefixSumMap.put(0L, 1);
@@ -125,6 +125,46 @@ class P_437_PathSumIii {
             prefixSumMap.put(preSum, prefixSumMap.get(preSum) - 1);
             return total;
         }
+
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        // 前缀和Map：key，（从根节点开始的）前缀和，value，路径个数
+        Map<Long, Integer> myPrefixSumMap = new HashMap<>();
+        // 结果
+        int myResult;
+        // 目标和
+        int myTargetSum;
+
+        public int pathSum(TreeNode root, int targetSum) {
+            // 初始化0的和值：比如第一个值是10，目标也是10，刚刚好符合条件
+            myPrefixSumMap.put(0L, 1);
+            myTargetSum = targetSum;
+            traverse(root, 0);
+            return myResult;
+        }
+
+        // 前缀和思想
+        private void traverse(TreeNode root, long pathSum) {
+            if (root == null) {
+                return;
+            }
+
+            pathSum += root.val;
+            if (myPrefixSumMap.containsKey(pathSum - myTargetSum)) {
+                myResult += myPrefixSumMap.get(pathSum - myTargetSum);
+            }
+            // 记录路径和
+            myPrefixSumMap.put(pathSum, myPrefixSumMap.getOrDefault(pathSum, 0) + 1);
+            // 继续递归遍历
+            traverse(root.left, pathSum);
+            traverse(root.right, pathSum);
+
+            // 注意，退出后要删除此路径和，题目要求只能从上往下
+            // 当前节点遍历完成，退出后要剔除；因为路径方向必须是向下的（只能从父节点到子节点）
+            myPrefixSumMap.put(pathSum, myPrefixSumMap.get(pathSum) - 1);
+        }
+
     }
     //leetcode submit region end(Prohibit modification and deletion)
 

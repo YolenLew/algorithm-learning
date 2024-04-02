@@ -67,7 +67,7 @@ class P_230_KthSmallestElementInABst {
         // 记录当前元素排名
         int rank;
 
-        public int kthSmallest(TreeNode root, int k) {
+        public int kthSmallest00(TreeNode root, int k) {
             // 中序遍历：二叉搜索树的中序遍历为递增序列。升序排列，找到第k个即可
             traverse(root, k);
             return res;
@@ -90,6 +90,29 @@ class P_230_KthSmallestElementInABst {
             traverse(root.right, k);
         }
 
+        // BST 的中序遍历结果是有序的（升序）
+        public int kthSmallest(TreeNode root, int k) {
+            reverseMy(root, k);
+            return resMy;
+        }
+
+        int resMy = 0;
+        int rankMy = 0;
+
+        private void reverseMy(TreeNode root, int k) {
+            if (root == null) {
+                return;
+            }
+            // 先遍历左树
+            reverseMy(root.left, k);
+            rankMy++;
+            if (rankMy == k) {
+                resMy = root.val;
+                return;
+            }
+
+            reverseMy(root.right, k);
+        }
     }
     //leetcode submit region end(Prohibit modification and deletion)
 

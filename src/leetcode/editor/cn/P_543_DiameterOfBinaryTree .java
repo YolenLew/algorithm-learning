@@ -78,7 +78,7 @@ class P_543_DiameterOfBinaryTree {
     class Solution {
         int maxDiameterer = 0;
 
-        public int diameterOfBinaryTree(TreeNode root) {
+        public int diameterOfBinaryTree00(TreeNode root) {
             traverse(root);
             return maxDiameterer;
         }
@@ -108,6 +108,42 @@ class P_543_DiameterOfBinaryTree {
 
             return Math.max(leftDepth, rightDepth) + 1;
         }
+
+        int myMaxDiameterer = 0;
+
+        public int diameterOfBinaryTree(TreeNode root) {
+            traverseMy(root);
+            return myMaxDiameterer;
+        }
+
+        private void traverseMy(TreeNode root) {
+            if (root == null) {
+                return;
+            }
+
+            // 分析：实质求左右子树最大高度之和(注意：不一定必须经过根节点，所以需要递归遍历整棵树)
+            int leftDepth = maxDepthMy(root.left);
+            int rightDepth = maxDepthMy(root.right);
+
+            myMaxDiameterer = Math.max(myMaxDiameterer, leftDepth + rightDepth);
+
+
+            // 递归遍历：即分别以左右节点为根节点，继续遍历(注意：不一定必须经过根节点，所以需要递归遍历整棵树)
+            traverseMy(root.left);
+            traverseMy(root.right);
+        }
+
+        private int maxDepthMy(TreeNode root) {
+            if (root == null) {
+                return 0;
+            }
+
+            int leftDepth = maxDepthMy(root.left);
+            int rightDepth = maxDepthMy(root.right);
+
+            return 1 + Math.max(leftDepth, rightDepth);
+        }
+
     }
     //leetcode submit region end(Prohibit modification and deletion)
 

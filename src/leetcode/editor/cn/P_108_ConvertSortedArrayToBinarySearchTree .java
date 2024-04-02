@@ -61,7 +61,7 @@ class P_108_ConvertSortedArrayToBinarySearchTree {
      * }
      */
     class Solution {
-        public TreeNode sortedArrayToBST(int[] nums) {
+        public TreeNode sortedArrayToBST00(int[] nums) {
             if (nums == null || nums.length == 0) {
                 return null;
             }
@@ -80,6 +80,27 @@ class P_108_ConvertSortedArrayToBinarySearchTree {
             root.right = buildNode(nums, mid + 1, right);
             return root;
         }
+
+        public TreeNode sortedArrayToBST(int[] nums) {
+            if (nums == null || nums.length == 0) {
+                return null;
+            }
+            return buildNodeMy(nums, 0, nums.length - 1);
+        }
+
+        private TreeNode buildNodeMy(int[] nums, int start, int end) {
+            if (start > end) {
+                return null;
+            }
+
+            int mid = start + (end - start) / 2;
+            TreeNode root = new TreeNode(nums[mid]);
+            root.left = buildNodeMy(nums, start, mid - 1);
+            root.right = buildNodeMy(nums, mid + 1, end);
+
+            return root;
+        }
+
     }
     //leetcode submit region end(Prohibit modification and deletion)
 

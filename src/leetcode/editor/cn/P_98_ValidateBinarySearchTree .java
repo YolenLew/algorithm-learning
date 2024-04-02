@@ -42,76 +42,98 @@ import leetcode.editor.cn.model.TreeNode;
 
 //java:验证二叉搜索树
 class P_98_ValidateBinarySearchTree {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         Solution solution = new P_98_ValidateBinarySearchTree().new Solution();
     }
 
-//leetcode submit region begin(Prohibit modification and deletion)
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
-class Solution {
-    // 最小值初始化为中序序列的第一个节点值
-    Integer pre;
-    public boolean isValidBST(TreeNode root) {
-        // 中序遍历解法：左根右，所以中序遍历一定是得到一个升序的序列。那么就可以通过一个pre值进行判断比较
-        if (root == null) {
-            return true;
-        }
-        // 中序遍历：先判断左子树
-        boolean validBSTLeft = isValidBST(root.left);
-        if (!validBSTLeft) {
-            return false;
-        }
-        // 然后比对根值：如果当前节点的值小于等于中序序列中上一个值，证明不是二叉搜索树（中序遍历是升序）
-        if (pre != null && root.val <= pre) {
-            return false;
-        }
-        // 如果当前节点小于中序序列上一个值，证明符合条件，更新pre为当前值，并继续下一个值的判断
-        pre = root.val;
+    //leetcode submit region begin(Prohibit modification and deletion)
 
-        // 中序遍历：最后判断右子树
-        return isValidBST(root.right);
+    /**
+     * Definition for a binary tree node.
+     * public class TreeNode {
+     * int val;
+     * TreeNode left;
+     * TreeNode right;
+     * TreeNode() {}
+     * TreeNode(int val) { this.val = val; }
+     * TreeNode(int val, TreeNode left, TreeNode right) {
+     * this.val = val;
+     * this.left = left;
+     * this.right = right;
+     * }
+     * }
+     */
+    class Solution {
+        // 最小值初始化为中序序列的第一个节点值
+        Integer pre;
+
+        public boolean isValidBST00(TreeNode root) {
+            // 中序遍历解法：左根右，所以中序遍历一定是得到一个升序的序列。那么就可以通过一个pre值进行判断比较
+            if (root == null) {
+                return true;
+            }
+            // 中序遍历：先判断左子树
+            boolean validBSTLeft = isValidBST00(root.left);
+            if (!validBSTLeft) {
+                return false;
+            }
+            // 然后比对根值：如果当前节点的值小于等于中序序列中上一个值，证明不是二叉搜索树（中序遍历是升序）
+            if (pre != null && root.val <= pre) {
+                return false;
+            }
+            // 如果当前节点小于中序序列上一个值，证明符合条件，更新pre为当前值，并继续下一个值的判断
+            pre = root.val;
+
+            // 中序遍历：最后判断右子树
+            return isValidBST00(root.right);
+        }
+
+        public boolean isValidBSTFirst(TreeNode root) {
+            // 分解：传递参数解法
+            return isValidBST00(root, null, null);
+        }
+
+        // 需要传递根节点的值，便于后续子树的大小判断也符合二叉搜索树
+        public boolean isValidBST00(TreeNode root, TreeNode min, TreeNode max) {
+            // 分解：每一颗子树都是二叉搜索树
+            // 注意：根据 BST 的定义，root 的整个左子树都要小于 root.val，整个右子树都要大于 root.val。
+            if (root == null) {
+                return true;
+            }
+
+            if (min != null && root.val <= min.val) {
+                return false;
+            }
+
+            if (max != null && root.val >= max.val) {
+                return false;
+            }
+
+            return isValidBST00(root.left, min, root) && isValidBST00(root.right, root, max);
+        }
+
+        public boolean isValidBST(TreeNode root) {
+            return checkAllNode(root, null, null);
+        }
+
+        // 限定以 root 为根的子树节点必须满足 max.val > root.val > min.val
+        private boolean checkAllNode(TreeNode root, TreeNode min, TreeNode max) {
+            if (root == null) {
+                return true;
+            }
+
+            if (min != null && min.val >= root.val) {
+                return false;
+            }
+
+            if (max != null && max.val <= root.val) {
+                return false;
+            }
+            // 限定左子树的最大值是 root.val，右子树的最小值是 root.val
+            return checkAllNode(root.left, min, root) && checkAllNode(root.right, root, max);
+        }
+
     }
-
-
-    public boolean isValidBSTFirst(TreeNode root) {
-        // 分解：传递参数解法
-        return isValidBST(root, null, null);
-    }
-
-    // 需要传递根节点的值，便于后续子树的大小判断也符合二叉搜索树
-    public boolean isValidBST(TreeNode root, TreeNode min, TreeNode max){
-        // 分解：每一颗子树都是二叉搜索树
-        // 注意：根据 BST 的定义，root 的整个左子树都要小于 root.val，整个右子树都要大于 root.val。
-        if (root == null) {
-            return true;
-        }
-
-        if (min != null && root.val <= min.val ) {
-            return false;
-        }
-
-        if (max != null && root.val >= max.val ) {
-            return false;
-        }
-
-        return isValidBST(root.left, min, root) && isValidBST(root.right, root, max);
-    }
-
-}
-//leetcode submit region end(Prohibit modification and deletion)
+    //leetcode submit region end(Prohibit modification and deletion)
 
 }

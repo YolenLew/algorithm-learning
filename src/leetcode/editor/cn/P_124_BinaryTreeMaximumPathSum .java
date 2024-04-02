@@ -64,7 +64,7 @@ class P_124_BinaryTreeMaximumPathSum {
         // 最大路径和
         int maxPathSum = Integer.MIN_VALUE;
 
-        public int maxPathSum(TreeNode root) {
+        public int maxPathSum00(TreeNode root) {
             dfs(root);
             return maxPathSum;
         }
@@ -92,6 +92,30 @@ class P_124_BinaryTreeMaximumPathSum {
             return outputMaxSum > 0 ? outputMaxSum : 0;
         }
 
+
+        int myMathSum = Integer.MIN_VALUE;
+        public int maxPathSum(TreeNode root){
+            traverse(root);
+            return myMathSum;
+        }
+
+        private int traverse(TreeNode root) {
+            if (root == null) {
+                return 0;
+            }
+
+            int leftSum = traverse(root.left);
+            int rightSum = traverse(root.right);
+
+            // 包含root，但不包含root的父节点，只看root这颗子树的内部最大路径
+            int innerSum = root.val + leftSum + rightSum;
+            myMathSum = Math.max(maxPathSum, innerSum);
+
+            // 包含root的父节点，那么只能选左子树或右子树其中的一侧
+            int outerSum = root.val + Math.max(0, Math.max(leftSum, rightSum));
+            // 如果子树对外提供的收益为负，那么可以直接剔除不要
+            return outerSum > 0 ? outerSum : 0;
+        }
     }
     //leetcode submit region end(Prohibit modification and deletion)
 
