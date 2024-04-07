@@ -41,7 +41,7 @@ class P_55_JumpGame {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        public boolean canJump(int[] nums) {
+        public boolean canJump00(int[] nums) {
             // 不一定非要明确一次究竟跳几步，每次取最大的跳跃步数，这个就是可以跳跃的覆盖范围
             int farthest = 0;
             for (int i = 0; i < nums.length; i++) {
@@ -51,6 +51,22 @@ class P_55_JumpGame {
                     return false;
                 }
             }
+            return farthest >= nums.length - 1;
+        }
+
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        public boolean canJump(int[] nums) {
+            // 不一定非要明确一次究竟跳几步，每次取最大的跳跃步数，这个就是可以跳跃的覆盖范围
+            int farthest = 0;
+            for (int i = 0; i < nums.length - 1; i++) {
+                farthest = Math.max(farthest, i + nums[i]);
+                if (farthest <= i) {
+                    return false;
+                }
+            }
+
             return farthest >= nums.length - 1;
         }
     }

@@ -44,6 +44,8 @@
 
 package leetcode.editor.cn;
 
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.Stack;
 
 //java:有效的括号
@@ -54,7 +56,7 @@ class P_20_ValidParentheses {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        public boolean isValid(String s) {
+        public boolean isValid00(String s) {
             // 栈：先进后出，遇到左符号就入栈，遇到右符号就去栈里栈顶匹配
             Stack<Character> stack = new Stack<>();
             for (char ch : s.toCharArray()) {
@@ -82,6 +84,39 @@ class P_20_ValidParentheses {
                 return '(';
             }
         }
+
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        public boolean isValid(String s) {
+            Deque<Character> stack = new LinkedList<>();
+            for (char ch : s.toCharArray()) {
+                if (ch == '(' || ch == '{' || ch == '[') {
+                    // 左括号入栈
+                    stack.push(ch);
+                } else {
+                    // 右括号：匹配栈顶元素
+                    if (stack.isEmpty() || !stack.peek().equals(getLeftChar(ch))) {
+                        return false;
+                    } else {
+                        stack.pop();
+                    }
+                }
+            }
+
+            return stack.isEmpty();
+        }
+
+        private Character getLeftChar(char rightChar) {
+            if (rightChar == '}') {
+                return '{';
+            } else if (rightChar == ']') {
+                return '[';
+            } else {
+                return '(';
+            }
+        }
+
     }
     //leetcode submit region end(Prohibit modification and deletion)
 

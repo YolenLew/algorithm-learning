@@ -41,7 +41,7 @@ class P_279_PerfectSquares {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        public int numSquares(int n) {
+        public int numSquares00(int n) {
             // 子问题：f(k)， 和为 k 的完全平方数的最少数量
             // 递推关系/状态转移方程：f(k) = min{f(k-1*1) + 1, f(k-2*2) + 1, f(k - 3*3) + 1....}
             // 计算顺序：自底向上的、使用 dp 数组的循环方法
@@ -53,6 +53,20 @@ class P_279_PerfectSquares {
                 for (int j = 1; j * j <= i; j++) {
                     // 注意：此处加1是因为，j*j是一个完全平方数，需要补充此处的次数
                     dp[i] = Math.min(dp[i], dp[i - j * j] + 1);
+                }
+            }
+
+            return dp[n];
+        }
+
+        public int numSquares(int n) {
+            int[] dp = new int[n + 1];
+            Arrays.fill(dp, Integer.MAX_VALUE);
+            dp[0] = 0;
+
+            for (int i = 1; i <= n; i++) {
+                for (int j = 1; j * j <= i; j++) {
+                    dp[i] = Math.min(dp[i - j * j] + 1, dp[i]);
                 }
             }
 

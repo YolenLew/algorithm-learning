@@ -56,7 +56,7 @@ class P_17_LetterCombinationsOfAPhoneNumber {
         // 数字与字母之间的映射
         String[] mapping = new String[] {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
 
-        public List<String> letterCombinations(String digits) {
+        public List<String> letterCombinations00(String digits) {
             if (digits == null || digits.isEmpty()) {
                 return result;
             }
@@ -84,6 +84,34 @@ class P_17_LetterCombinationsOfAPhoneNumber {
                 backtrack(digits, start + 1, track);
                 // 撤销选择
                 track.deleteCharAt(track.length() - 1);
+            }
+        }
+
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        public List<String> letterCombinations(String digits) {
+            if (digits == null || digits.isEmpty()) {
+                return result;
+            }
+            backtrackMy(digits, new StringBuilder(), 0);
+            return result;
+        }
+
+        private void backtrackMy(String digits, StringBuilder sb, int start) {
+            if (sb.length() == digits.length()) {
+                result.add(sb.toString());
+                return;
+            }
+
+            // 遍历选择列表进行选择
+            char num = digits.charAt(start);
+            String letters = mapping[num - '0'];
+
+            for (int j = 0; j < letters.length(); j++) {
+                sb.append(letters.charAt(j));
+                backtrack(digits, start + 1, sb);
+                sb.deleteCharAt(sb.length() - 1);
             }
         }
     }

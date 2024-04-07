@@ -50,7 +50,7 @@ class P_322_CoinChange {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        public int coinChange(int[] coins, int amount) {
+        public int coinChange00(int[] coins, int amount) {
             // 子问题：f(k)，总金额为 k 的硬币组合最少数量
             // 递推关系/状态转移方程：f(k) = min{f(k - coin) + 1 | coin in coins}
             // 计算顺序：自底向上的、使用 dp 数组的循环方法
@@ -70,6 +70,28 @@ class P_322_CoinChange {
                 }
             }
 
+            return dp[amount] == amount + 1 ? -1 : dp[amount];
+        }
+
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        public int coinChange(int[] coins, int amount) {
+
+            int[] dp = new int[amount + 1];
+            Arrays.fill(dp, amount + 1);
+            dp[0] = 0;
+            Arrays.sort(coins);
+
+            for (int i = 1; i <= amount; i++) {
+                for (int coin : coins) {
+                    if (i < coin) {
+                        break;
+                    }
+
+                    dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+                }
+            }
             return dp[amount] == amount + 1 ? -1 : dp[amount];
         }
     }

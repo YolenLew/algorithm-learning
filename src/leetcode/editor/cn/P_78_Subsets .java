@@ -32,6 +32,7 @@
 
 package leetcode.editor.cn;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -48,7 +49,7 @@ class P_78_Subsets {
         // 单次结果的路径集
         LinkedList<Integer> track = new LinkedList<>();
 
-        public List<List<Integer>> subsets(int[] nums) {
+        public List<List<Integer>> subsets00(int[] nums) {
             // 一层一层累加并子集
             backtrack(nums, 0);
             return result;
@@ -68,6 +69,26 @@ class P_78_Subsets {
                 track.removeLast();
             }
 
+        }
+
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        public List<List<Integer>> subsets(int[] nums) {
+            backtrackMy(nums, 0);
+            return result;
+        }
+
+        // 一层一层节点遍历收集
+        private void backtrackMy(int[] nums, int level) {
+            result.add(new ArrayList<>(track));
+            for (int i = level; i < nums.length; i++) {
+                track.add(nums[i]);
+                // 下钻递归选择
+                backtrackMy(nums, i + 1);
+                // 撤消选额
+                track.removeLast();
+            }
         }
     }
 

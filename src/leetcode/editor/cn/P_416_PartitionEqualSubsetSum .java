@@ -30,6 +30,8 @@
 
 package leetcode.editor.cn;
 
+import java.util.Arrays;
+
 //java:分割等和子集
 class P_416_PartitionEqualSubsetSum {
     public static void main(String[] args) {
@@ -38,7 +40,7 @@ class P_416_PartitionEqualSubsetSum {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        public boolean canPartition(int[] nums) {
+        public boolean canPartition00(int[] nums) {
             // 问题转换：给一个可装载重量为 sum / 2 的背包和 N 个物品，每个物品的重量为 nums[i]。现在让你装物品，是否存在一种装法，能够恰好将背包装满？
 
             // 明确状态：如何才能描述一个问题局面？只要给几个物品和一个背包的容量限制，就形成了一个背包问题。所以状态有两个，就是「背包的容量」和「可选择的物品」。
@@ -77,7 +79,7 @@ class P_416_PartitionEqualSubsetSum {
                     // 判断背包容量
                     if (j - nums[i - 1] < 0) {
                         // 容量不足了，不能装入了，只能沿用上一次结果
-                        dp[i][j] =  dp[i - 1][j];
+                        dp[i][j] = dp[i - 1][j];
                     } else {
                         // 容量足够，可选择 不装入背包 或 装入
                         dp[i][j] = dp[i - 1][j] || dp[i - 1][j - nums[i - 1]];
@@ -86,6 +88,40 @@ class P_416_PartitionEqualSubsetSum {
             }
 
             return dp[n][sum];
+        }
+
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        public boolean canPartition(int[] nums) {
+            int sum = Arrays.stream(nums).sum();
+            if (sum % 2 != 0) {
+                return false;
+            }
+
+            int target = sum / 2;
+            int n = nums.length;
+
+            // 物品从1开始算
+            // 对于前i个物品，背包容量为j时，能否装满背包
+            boolean[][] dp = new boolean[n + 1][target + 1];
+            // base case：容量为0时必能装满true
+            for (int i = 0; i <= n; i++) {
+                dp[i][0] = true;
+            }
+
+            // 对于前i个物品，背包容量为j时，能否装满背包
+            for (int i = 1; i <= n; i++) {
+                for (int j = 1; j <= target; j++) {
+                    if (j - nums[i - 1] < 0) {
+                        dp[i][j] = dp[i - 1][j];
+                    } else {
+                        dp[i][j] = dp[i - 1][j - nums[i - 1]] || dp[i - 1][j];
+                    }
+                }
+            }
+
+            return dp[n][target];
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

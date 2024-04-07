@@ -45,7 +45,7 @@ class P_22_GenerateParentheses {
         // 满足条件的单次结果
         LinkedList<Character> stack = new LinkedList<>();
 
-        public List<String> generateParenthesis(int n) {
+        public List<String> generateParenthesis00(int n) {
             // 可用的左括号和右括号数量初始化为 n
             backtrack(n, n);
             return result;
@@ -83,7 +83,8 @@ class P_22_GenerateParentheses {
         }
 
         private String appendAsString(LinkedList<Character> stack) {
-//            return stack.stream().collect(StringBuilder::new, StringBuilder::append, StringBuilder::append).toString();
+            //            return stack.stream().collect(StringBuilder::new, StringBuilder::append,
+            //            StringBuilder::append).toString();
             StringBuilder sb = new StringBuilder(stack.size());
             for (Character ch : stack) {
                 sb.append(ch);
@@ -91,6 +92,48 @@ class P_22_GenerateParentheses {
             return sb.toString();
         }
 
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        List<String> resultMy = new ArrayList<>();
+        // 满足条件的单次结果
+        LinkedList<Character> stackMy = new LinkedList<>();
+
+        public List<String> generateParenthesis(int n) {
+            // 可用的左括号n、右括号n
+            backtrackMy(n, n);
+            return resultMy;
+        }
+
+        private void backtrackMy(int left, int right) {
+            // 当所有括号都恰好用完时，得到一个合法的括号组合
+            if (left == 0 && right == 0) {
+                resultMy.add(appendAsString(stackMy));
+                return;
+            }
+
+            // 可用的左括号数量大，说明本次组合不合法
+            if (left > right) {
+                return;
+            }
+            // 数量小于 0 肯定是不合法的
+            if (left < 0 || right < 0) {
+                return;
+            }
+
+            // 遍历选择列表进行选择：本案例列表只有两种选择左括号和右括号
+            // 必须保证先选左括号，然后再选右括号
+            stackMy.add('(');
+            backtrackMy(left - 1, right);
+            // 撤销选择
+            stackMy.removeLast();
+
+
+            stackMy.add(')');
+            backtrackMy(left, right - 1);
+            stackMy.removeLast();
+
+        }
     }
     //leetcode submit region end(Prohibit modification and deletion)
 

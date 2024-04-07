@@ -44,7 +44,7 @@ class P_121_BestTimeToBuyAndSellStock {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        public int maxProfit(int[] prices) {
+        public int maxProfit00(int[] prices) {
             int rightMax = Integer.MIN_VALUE, result = 0;
             // 逆序遍历，找每个元素的右边最大，即最优的卖出，然后减去该元素，即在这一天买入能获得最大利润
             for (int i = prices.length - 1; i >= 0; i--) {
@@ -52,6 +52,18 @@ class P_121_BestTimeToBuyAndSellStock {
                 result = Math.max(result, rightMax - prices[i]);
             }
             return result;
+        }
+
+        // 如果第i天卖出股票，则最大利润为(该天的股价-前面天数中最小的股价)，然后与已知的最大利润比较，如果大于则更新当前最大利润的值
+        public int maxProfit(int[] prices) {
+            int minCost = Integer.MAX_VALUE;
+            int maxProfit = 0;
+            for (int price : prices) {
+                minCost = Math.min(minCost, price);
+                maxProfit = Math.max(maxProfit, price - minCost);
+            }
+
+            return maxProfit;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

@@ -48,7 +48,7 @@ class P_131_PalindromePartitioning {
         // 单词符合条件的结果
         LinkedList<String> stack = new LinkedList<>();
 
-        public List<List<String>> partition(String s) {
+        public List<List<String>> partition00(String s) {
             // 分割字符串，统计符合回文字符条件的所有组合(元素可重复不可复选的排列问题)
             backtrack(s, 0);
             return result;
@@ -86,6 +86,35 @@ class P_131_PalindromePartitioning {
                 end--;
             }
             return true;
+        }
+
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        List<List<String>> myResult = new ArrayList<>();
+        LinkedList<String> myStack = new LinkedList<>();
+        public List<List<String>> partition(String s) {
+            myBacktrack(s, 0);
+            return myResult;
+        }
+
+        private void myBacktrack(String s, int start) {
+            if (start == s.length()) {
+                myResult.add(new ArrayList<>(myStack));
+                return;
+            }
+
+            // 遍历列表选择
+            for (int i = start; i < s.length(); i++) {
+                String substring = s.substring(start, i+1);
+                if (!isPalindrome(substring, 0, substring.length() - 1)) {
+                    continue;
+                }
+
+                myStack.addLast(substring);
+                myBacktrack(s, i + 1);
+                myStack.removeLast();
+            }
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

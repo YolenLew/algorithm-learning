@@ -56,7 +56,7 @@ class P_300_LongestIncreasingSubsequence {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        public int lengthOfLIS(int[] nums) {
+        public int lengthOfLIS00(int[] nums) {
             // 子问题：f(k)， 数组nums中0~k个元素组成的最长递增子序列的长度
             // dp[i] 表示以 nums[i] 这个数结尾的最长递增子序列的长度。
             // 运用数学归纳法的思想，假设 `dp[0...i-1]` 都已知，想办法求出 `dp[i]`
@@ -79,6 +79,32 @@ class P_300_LongestIncreasingSubsequence {
             int max = 1;
             for (int length : dp) {
                 max = Math.max(max, length);
+            }
+            return max;
+        }
+
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        public int lengthOfLIS(int[] nums) {
+            int length = nums.length;
+            int[] dp = new int[length];
+            // base case：dp[i] 初始值为 1，因为以 nums[i] 结尾的最长递增子序列起码要包含它自己
+            Arrays.fill(dp, 1);
+
+            for (int i = 0; i < length; i++) {
+                for (int j = 0; j < i; j++) {
+                    // 寻找前述子问题中，最后一个元素比当前元素小的，那么当前子问题的解就是那个子问题的基础上加一
+                    if (nums[j] < nums[i]) {
+                        dp[i] = Math.max(dp[j] + 1, dp[i]);
+                    }
+                }
+            }
+
+            // 最后遍历dp数组，寻找最大值
+            int max = 1;
+            for (int value : dp) {
+                max = Math.max(max, value);
             }
             return max;
         }

@@ -62,7 +62,7 @@ class P_39_CombinationSum {
         // 单次符合条件的集合
         LinkedList<Integer> stack = new LinkedList<>();
 
-        public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        public List<List<Integer>> combinationSum00(int[] candidates, int target) {
             backtrack(candidates, target, 0, 0);
             return result;
         }
@@ -98,6 +98,41 @@ class P_39_CombinationSum {
                 // 撤消选择
                 sum -= candidates[i];
                 stack.removeLast();
+            }
+        }
+
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        // 所有结果的结果集
+        List<List<Integer>> resultMy = new ArrayList<>();
+        // 单次符合条件的集合
+        LinkedList<Integer> trackMy = new LinkedList<>();
+
+        public List<List<Integer>> combinationSum(int[] candidates, int target) {
+            backtrackMy(candidates, target, 0, 0);
+            return resultMy;
+        }
+
+        private void backtrackMy(int[] candidates, int target, int start, int sum) {
+            if (sum == target) {
+                resultMy.add(new ArrayList<>(trackMy));
+                return;
+            }
+
+            if (sum > target) {
+                return;
+            }
+
+            // 遍历列表选择
+            for (int i = start; i < candidates.length; i++) {
+                sum += candidates[i];
+                trackMy.addLast(candidates[i]);
+
+                backtrackMy(candidates, target, i, sum);
+
+                sum -= candidates[i];
+                trackMy.removeLast();
             }
         }
     }

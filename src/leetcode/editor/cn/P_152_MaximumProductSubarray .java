@@ -41,7 +41,7 @@ class P_152_MaximumProductSubarray {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        public int maxProduct(int[] nums) {
+        public int maxProduct00(int[] nums) {
             // 状态定义：
             //      设动态规划列表dp1 ，dp1[i]代表以元素 nums[i]为结尾的连续子数组最小积
             //      设动态规划列表dp2 ，dp2[i]代表以元素 nums[i]为结尾的连续子数组最大积
@@ -72,6 +72,32 @@ class P_152_MaximumProductSubarray {
             }
 
             return res;
+        }
+
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        public int maxProduct(int[] nums) {
+            int n = nums.length;
+            // 存在负负得正情况，声明两个数组，一个最大值，一个最小值
+            int[] minDp = new int[n];
+            int[] maxDp = new int[n];
+
+            // base case
+            minDp[0] = nums[0];
+            maxDp[0] = nums[0];
+
+            for (int i = 1; i < nums.length; i++) {
+                minDp[i] = Math.min(nums[i], Math.min(minDp[i - 1] * nums[i], maxDp[i - 1] * nums[i]));
+                maxDp[i] = Math.max(nums[i], Math.max(minDp[i - 1] * nums[i], maxDp[i - 1] * nums[i]));
+            }
+
+            int ans = Integer.MIN_VALUE;
+            for (int value : maxDp) {
+                ans = Math.max(ans, value);
+            }
+
+            return ans;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

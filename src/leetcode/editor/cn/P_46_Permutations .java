@@ -52,7 +52,7 @@ class P_46_Permutations {
         // 结果集合
         List<List<Integer>> result = new LinkedList<>();
 
-        public List<List<Integer>> permute(int[] nums) {
+        public List<List<Integer>> permute00(int[] nums) {
             if (nums == null || nums.length == 0) {
                 return result;
             }
@@ -102,6 +102,42 @@ class P_46_Permutations {
             }
         }
 
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        public List<List<Integer>> permute(int[] nums) {
+            List<List<Integer>> result = new ArrayList<>();
+            // 每一次符合要求的路径
+            LinkedList<Integer> stack = new LinkedList<>();
+            // 访问标记
+            boolean[] visited = new boolean[nums.length];
+            backtrackMy(nums, stack, visited, result);
+
+            return result;
+        }
+
+        private void backtrackMy(int[] nums, LinkedList<Integer> stack, boolean[] visited, List<List<Integer>> result) {
+            if (stack.size() == nums.length) {
+                result.add(new ArrayList<>(stack));
+                return;
+            }
+
+            // 遍历选择列表进行选择
+            for (int i = 0; i < nums.length; i++) {
+                if (visited[i]) {
+                    continue;
+                }
+
+                // 选择元素
+                stack.addLast(nums[i]);
+                visited[i] = true;
+                backtrackMy(nums, stack, visited, result);
+
+                // 回溯元素
+                stack.removeLast();
+                visited[i] = false;
+            }
+        }
     }
     //leetcode submit region end(Prohibit modification and deletion)
 

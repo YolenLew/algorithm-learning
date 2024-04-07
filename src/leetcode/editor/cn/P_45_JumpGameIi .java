@@ -49,7 +49,7 @@ class P_45_JumpGameIi {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        public int jump(int[] nums) {
+        public int jump00(int[] nums) {
             // 记录每次能到达的右边界
             int end = 0;
             // 记录最远跳到的位置
@@ -66,6 +66,28 @@ class P_45_JumpGameIi {
                     end = farthest;
                 }
             }
+            return step;
+        }
+
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        public int jump(int[] nums) {
+            // 记录当前位置能跳到的最远位置
+            int farthest = 0;
+            // 跳跃次数
+            int step = 0;
+            // 记录每次能到达的右边界
+            int end = 0;
+            for (int i = 0; i < nums.length - 1; i++) {
+                farthest = Math.max(farthest, i + nums[i]);
+                if (i == end) {
+                    // 每到达一次边界，就需要新的一次跳跃了
+                    step++;
+                    end = farthest;
+                }
+            }
+
             return step;
         }
     }

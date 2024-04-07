@@ -46,7 +46,7 @@ class P_74_SearchA2dMatrix {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        public boolean searchMatrix(int[][] matrix, int target) {
+        public boolean searchMatrix00(int[][] matrix, int target) {
             // 关键：通过将二维数组展开成一维数组
             int row = matrix.length;
             int column = matrix[0].length;
@@ -75,6 +75,35 @@ class P_74_SearchA2dMatrix {
             int row = index / width;
             int column = index % width;
             return matrix[row][column];
+        }
+
+        public boolean searchMatrix(int[][] matrix, int target) {
+            // 关键：通过将二维数组展开成一维数组
+            int row = matrix.length;
+            int column = matrix[0].length;
+            int left = 0;
+            int right = row * column - 1;
+            while (left <= right) {
+                int mid = left + (right - left) / 2;
+                int value = myGetValue(matrix, mid);
+                if (value == target) {
+                    return true;
+                } else if (value > target) {
+                    right = mid - 1;
+                } else if (value < target) {
+                    left = mid + 1;
+                }
+            }
+
+            return false;
+        }
+
+        private int myGetValue(int[][] matrix, int index) {
+            int column = matrix[0].length;
+            int x = index / column;
+            int y = index % column;
+
+            return matrix[x][y];
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

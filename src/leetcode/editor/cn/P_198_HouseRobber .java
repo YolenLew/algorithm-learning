@@ -37,25 +37,43 @@ package leetcode.editor.cn;
 
 //java:打家劫舍
 class P_198_HouseRobber {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         Solution solution = new P_198_HouseRobber().new Solution();
     }
 
-//leetcode submit region begin(Prohibit modification and deletion)
-class Solution {
-    public int rob(int[] nums) {
-        int pre = 0;
-        int curr = 0;
+    //leetcode submit region begin(Prohibit modification and deletion)
+    class Solution {
+        public int rob00(int[] nums) {
+            int pre = 0;
+            int curr = 0;
 
-        for (int num : nums) {
-            int tmp = Math.max(pre + num, curr);
-            pre = curr;
-            curr = tmp;
+            for (int num : nums) {
+                int tmp = Math.max(pre + num, curr);
+                pre = curr;
+                curr = tmp;
+            }
+
+            return curr;
         }
 
-        return curr;
+        public int rob(int[] nums) {
+            if (nums == null || nums.length == 0) {
+                return 0;
+            }
+            // 子问题：f(k)，从 k 个房子中能偷到的最大金额
+            // 递推关系/状态转移方程：f(k) = Math.max(f(k-1), f(k - 2) + value(k-1));
+            // 计算顺序：自底向上的、使用 dp 数组的循环方法
+            int length = nums.length;
+            int[] dp = new int[length + 1];
+            dp[1] = nums[0];
+
+            for (int i = 2; i <= nums.length; i++) {
+                dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i - 1]);
+            }
+
+            return dp[length];
+        }
     }
-}
-//leetcode submit region end(Prohibit modification and deletion)
+    //leetcode submit region end(Prohibit modification and deletion)
 
 }

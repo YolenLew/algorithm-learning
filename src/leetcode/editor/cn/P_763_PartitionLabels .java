@@ -48,7 +48,7 @@ class P_763_PartitionLabels {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        public List<Integer> partitionLabels(String s) {
+        public List<Integer> partitionLabels00(String s) {
             // 同一个字母的第一次出现的下标位置和最后一次出现的下标位置必须出现在同一个片段。因此需要遍历字符串，得到每个字母最后一次出现的下标位置
             Map<Character, Integer> lastMap = new HashMap<>();
             for (int i = 0; i < s.toCharArray().length; i++) {
@@ -64,6 +64,32 @@ class P_763_PartitionLabels {
                     start = end + 1;
                 }
             }
+            return partition;
+        }
+
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        public List<Integer> partitionLabels(String s) {
+            // 同一个字母的第一次出现的下标位置和最后一次出现的下标位置必须出现在同一个片段。因此需要遍历字符串，得到每个字母最后一次出现的下标位置
+            Map<Character, Integer> charIdxMap = new HashMap<>();
+            for (int i = 0; i < s.length(); i++) {
+                charIdxMap.put(s.charAt(i), i);
+            }
+
+            List<Integer> partition = new ArrayList<>();
+            int start = 0, end = 0;
+            for (int i = 0; i < s.length(); i++) {
+                char letter = s.charAt(i);
+                Integer idx = charIdxMap.get(letter);
+                end = Math.max(end, idx);
+
+                if (end == i) {
+                    partition.add(end - start + 1);
+                    start = i + 1;
+                }
+            }
+
             return partition;
         }
     }

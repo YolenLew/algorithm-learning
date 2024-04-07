@@ -44,7 +44,31 @@ class P_118_PascalsTriangle {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
+
         public List<List<Integer>> generate(int numRows) {
+            List<List<Integer>> result = new ArrayList<>();
+            if (numRows < 1) {
+                return result;
+            }
+            // 初始化第一层元素
+            result.add(Collections.singletonList(1));
+            for (int i = 1; i < numRows; i++) {
+                List<Integer> currentList = new ArrayList<>();
+                currentList.add(1);
+                List<Integer> preList = result.get(i - 1);
+                int preSize = preList.size();
+                for (int j = 0; j < preSize - 1; j++) {
+                    currentList.add(preList.get(j) + preList.get(j + 1));
+                }
+                currentList.add(1);
+
+                result.add(currentList);
+            }
+
+            return result;
+        }
+
+        public List<List<Integer>> generate00(int numRows) {
             List<List<Integer>> result = new ArrayList<>();
             if (numRows < 1) {
                 return result;
