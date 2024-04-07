@@ -94,8 +94,8 @@ class P_15_ThreeSum {
                             right--;
                         }
                         // 移动指针
-                        left++;
                         right--;
+                        left++;
 
                     } else if (sum < 0){
                         // 移动指针
