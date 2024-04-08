@@ -52,6 +52,34 @@ class P_3_LongestSubstringWithoutRepeatingCharacters {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public int lengthOfLongestSubstring(String s) {
+            // 滑动窗口解法
+            // 记录字符索引
+            Map<Character, Integer> charIdxWindow = new HashMap<>();
+            int left = 0;
+            int right = 0;
+            int ans = 0;
+
+            while (right < s.length()) {
+                char c = s.charAt(right);
+                right++;
+                // 更新窗口
+                charIdxWindow.merge(c, 1, Integer::sum);
+
+                // 缩小窗口
+                while (charIdxWindow.get(c) > 1) {
+                    char d = s.charAt(left);
+                    left++;
+                    charIdxWindow.put(d, charIdxWindow.get(d) - 1);
+                }
+
+                // 注意：前面right已经累加了
+                ans = Math.max(ans, right - left);
+            }
+
+            return ans;
+        }
+
+        public int lengthOfLongestSubstring90(String s) {
             if (s == null || s.length() == 0) {
                 return 0;
             }

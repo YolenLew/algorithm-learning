@@ -22,7 +22,14 @@ public class TreeNode {
         this.right = right;
     }
 
-    // 根据数值数组，构建二叉树
+    /**
+     * 根据层序遍历的结果数组，构建二叉树
+     *
+     * @param values 层序遍历的结果数组
+     * @param i      开始索引
+     * @param n      结束索引
+     * @return 二叉树
+     */
     public static TreeNode buildTree(Integer[] values, int i, int n) {
         if (i >= n || values[i] == null) {
             return null;

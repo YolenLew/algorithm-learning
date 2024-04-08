@@ -36,6 +36,7 @@
 
 package leetcode.editor.cn;
 
+import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.LinkedList;
 
@@ -47,11 +48,32 @@ class P_739_DailyTemperatures {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
+
+        // 从左往右：栈中记录还没算出「下一个更大元素」的那些数（的下标）
         public int[] dailyTemperatures(int[] temperatures) {
+            int n = temperatures.length;
+            int[] ans = new int[n];
+            Deque<Integer> stack = new ArrayDeque<>();
+            for (int i = 0; i < temperatures.length; i++) {
+                while (!stack.isEmpty() && temperatures[i] > temperatures[stack.peek()]) {
+                    Integer topIdx = stack.pop();
+                    ans[topIdx] = i - topIdx;
+                }
+
+                stack.push(i);
+            }
+
+            return ans;
+        }
+
+        // 从右到左
+        // 栈中记录下一个更大元素的「候选项」。
+        public int[] dailyTemperatures90(int[] temperatures) {
             int length = temperatures.length;
             int[] answer = new int[length];
             Deque<Integer> stack = new LinkedList<>();
             for (int i = length - 1; i >= 0; i--) {
+                // 注意此处边界判断，是小于等于
                 while (!stack.isEmpty() && temperatures[stack.peek()] <= temperatures[i]) {
                     stack.pop();
                 }
