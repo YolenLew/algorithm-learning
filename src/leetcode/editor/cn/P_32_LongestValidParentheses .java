@@ -42,17 +42,20 @@
 
 package leetcode.editor.cn;
 
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.Stack;
 
 //java:最长有效括号
 class P_32_LongestValidParentheses {
     public static void main(String[] args) {
         Solution solution = new P_32_LongestValidParentheses().new Solution();
+        System.out.println(solution.longestValidParentheses("(()"));
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        public int longestValidParentheses(String s) {
+        public int longestValidParentheses00(String s) {
             // 1、明确状态：如何才能描述一个问题局面？只要给s的一部分字符串，求最长合法子串长度
             // 2、明确选择：对于一个括号，由 左括号 和 右括号 两种情况
             // 3、明确dp数组定义：dp[i]记录以 s[i-1] 结尾的最长合法括号子串长度
@@ -86,6 +89,50 @@ class P_32_LongestValidParentheses {
             }
 
             int res = 0;
+            for (int len : dp) {
+                res = Math.max(res, len);
+            }
+
+            return res;
+        }
+
+        // --------------------------------------------------------------------------------------------
+        // --------------------------------------------------------------------------------------------
+        // --------------------------------------------------------------------------------------------
+        public int longestValidParentheses(String s) {
+            int n = s.length();
+            if (n == 0) {
+                return 0;
+            }
+            // 记录左括号索引
+            Deque<Integer> stack = new LinkedList<>();
+            // dp数组：记录以i结尾的最长有效（格式正确且连续）括号子串的长度
+            int[] dp = new int[n];
+            // base case
+            dp[0] = 0;
+
+            for (int i = 0; i < n; i++) {
+                if (s.charAt(i) == '(') {
+                    stack.push(i);
+                    // 左括号：左括号不可能是合法括号子串的结尾
+                    dp[i] = 0;
+                } else {
+                    // 右括号：需要与栈顶左括号匹配
+                    if (stack.isEmpty()) {
+                        dp[i] = 0;
+                    } else {
+                        // 与栈顶左括号匹配
+                        // 获取左括号索引，计算合法括号长度
+                        Integer leftIndex = stack.pop();
+                        int validLength = i + 1 - leftIndex;
+                        // 当前有效长度+左括号前一个合法子串的长度
+                        int lastIndex = leftIndex > 0 ? leftIndex - 1 : 0;
+                        dp[i] = validLength + dp[lastIndex];
+                    }
+                }
+            }
+
+            int res = Integer.MIN_VALUE;
             for (int len : dp) {
                 res = Math.max(res, len);
             }
